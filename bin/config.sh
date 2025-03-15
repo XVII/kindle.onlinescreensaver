@@ -29,12 +29,11 @@ DEFAULTINTERVAL=300
 #
 # Use the checkschedule.sh script to verify that the setting is correct and
 # which would be the active interval.
-SCHEDULE="00:00-08:00=120 08:00-20:00=10 20:00-24:00=60"
+SCHEDULE="00:00-24:00=1"
 
 # URL of screensaver image. This really must be in the EXACT resolution of
 # your Kindle's screen (e.g. 600x800 or 758x1024) and really must be PNG.
-#IMAGE_URI="http://enter.the.domain/here/and/the/path/to/the/image.png"
-IMAGE_URI="http://192.168.178.49:5000/"
+IMAGE_URI="https://picsum.photos/600/800?grayscale"
 
 # folder that holds the screensavers
 SCREENSAVERFOLDER=/mnt/us/linkss/screensavers/
@@ -50,11 +49,11 @@ LOGGING=0
 # Where to log to - either /dev/stderr for console output, or an absolute
 # file path (beware that this may grow large over time!)
 LOGFILE=/dev/stderr
-#LOGFILE=/mnt/us/extensions/onlinescreensaver/log/onlinescreensaver.log
+# LOGFILE=/mnt/us/extensions/onlinescreensaver/log/onlinescreensaver.log
 
 # whether to disable WiFi after the script has finished (if WiFi was off
 # when the script started, it will always turn it off)
-DISABLE_WIFI=1
+DISABLE_WIFI=0
 
 # Domain to ping to test network connectivity. Default should work, but in
 # case some firewall blocks access, try a popular local website.

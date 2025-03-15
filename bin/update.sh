@@ -2,7 +2,7 @@
 #
 ##############################################################################
 #
-# Fetch weather screensaver from a configurable URL.
+# Fetch screensaver image from a configurable URL.
 
 # change to directory of this script
 cd "$(dirname "$0")"
@@ -29,19 +29,20 @@ if [ -z $IMAGE_URI ]; then
 fi
 
 # enable wireless if it is currently off
-if [ 0 -eq `lipc-get-prop com.lab126.cmd wirelessEnable` ]; then
-	logger "WiFi is off, turning it on now"
-	lipc-set-prop com.lab126.cmd wirelessEnable 1
-	#lipc-set-prop com.lab126.wifid enable 1 
-	DISABLE_WIFI=1
-fi
+# TODO: wifi switch doesn't work on K3
+#if [ 0 -eq `lipc-get-prop com.lab126.cmd wirelessEnable` ]; then
+#	logger "WiFi is off, turning it on now"
+#	lipc-set-prop com.lab126.cmd wirelessEnable 1
+#	DISABLE_WIFI=1
+#fi
 
 # wait for network to be up
 TIMER=${NETWORK_TIMEOUT}     # number of seconds to attempt a connection
 CONNECTED=0                  # whether we are currently connected
 while [ 0 -eq $CONNECTED ]; do
 	# test whether we can ping outside
-	/bin/ping -c 1 -w 2 $TEST_DOMAIN > /dev/null && CONNECTED=1
+	# TODO: Ping doesn't support -w on K3
+	/bin/ping -c 1 $TEST_DOMAIN > /dev/null && CONNECTED=1
 
 	# if we can't, checkout timeout or sleep for 1s
 	if [ 0 -eq $CONNECTED ]; then
@@ -66,16 +67,17 @@ if [ 1 -eq $CONNECTED ]; then
 			logger "Updating image on screen"
 			eips -f -g $SCREENSAVERFILE
 		fi	else
-		logger "Error updating screensaver"
+			logger "Error updating screensaver"
+		
 		if [ 1 -eq $DONOTRETRY ]; then
 			touch $SCREENSAVERFILE
 		fi
 	fi
 fi
 
-# disable wireless if necessary
-if [ 1 -eq $DISABLE_WIFI ]; then
-	logger "Disabling WiFi"
-	lipc-set-prop com.lab126.cmd wirelessEnable 0
-	#lipc-set-prop com.lab126.wifid enable 0
-fi
+# disable wireless if necessary 
+# TODO: wifi switch doesn't work on K3
+#if [ 1 -eq $DISABLE_WIFI ]; then
+#	logger "Disabling WiFi"
+#	lipc-set-prop com.lab126.cmd wirelessEnable 0
+#fi
