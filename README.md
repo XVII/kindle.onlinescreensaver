@@ -1,10 +1,6 @@
-THIS REPO CONTAINS THE ORIGINAL WORK OF Peterson from https://www.mobileread.com/forums/showthread.php?t=236104
+THIS REPO CONTAINS THE ORIGINAL WORK OF Peterson: https://www.mobileread.com/forums/showthread.php?t=236104
 
-It additionally combines the info from D. Krannich https://blog.krannich.de/fhem-status-auf-kindle-paperwhite-3/
-
-to make this project work for the kindle paperwhite 2
-
-<a href="https://www.buymeacoffee.com/kuhno92" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+Forked from https://github.com/Kuhno92/onlinescreensaverPW2
 
 
 Online Screensaver
