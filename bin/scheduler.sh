@@ -1,13 +1,25 @@
 #!/bin/sh
-
-exitloop=0
+#
+##############################################################################
+#
+# Fetch weather screensaver from a configurable URL at configurable intervals.
+#
+# Features:
+#   - updates even when device is suspended
+#   - refreshes screensaver image if active
+#   - turns WiFi on and back off if necessary
+#   - tries to use as little CPU as possible
+#
+##############################################################################
 
 # change to directory of this script
 cd "$(dirname "$0")"
 
+INSTALLDIR=/mnt/us/extensions/onlinescreensaver
+
 # load configuration
 if [ -e "config.sh" ]; then
-	source /mnt/us/extensions/onlinescreensaver/bin/config.sh
+	source $INSTALLDIR/bin/config.sh
 else
 	# set default values
 	INTERVAL=240
@@ -16,7 +28,7 @@ fi
 
 # load utils
 if [ -e "utils.sh" ]; then
-	source /mnt/us/extensions/onlinescreensaver/bin/utils.sh
+	source $INSTALLDIR/bin/utils.sh
 else
 	echo "Could not find utils.sh in `pwd`"
 	exit
@@ -100,62 +112,19 @@ EOF
 	echo $(( $NEXTUPDATE - $CURRENTMINUTE ))
 }
 
+
+##############################################################################
+
 # use a 48 hour schedule
 extend_schedule
 
-while [ 1 -eq 1 ]
-do
-	logger "loooop"
-	exitloop=0
+# forever and ever, try to update the screensaver
+while [ 1 -eq 1 ]; do 
+	sh ./update.sh
+	
+	# wait for the next trigger time
+	# wait_for $(( 60 * $(get_time_to_next_update) ))
 
-	if [ `lipc-get-prop com.lab126.powerd status | grep "Screen Saver" | wc -l` -gt 0 ]
-	then
-		logger "Running update on Screen Saver status"
+	sleep $DEFAULTINTERVAL
 
-		sh ./update.sh
-
-		while [ $exitloop -eq 0 ]
-		do
-			if [ `lipc-get-prop com.lab126.powerd status | grep "Ready" | wc -l` -gt 0 ]
-			then
-				lipc-set-prop com.lab126.powerd deferSuspend 3000000
-				exitloop=1
-			fi
-
-			if [ $exitloop -eq 0 ] && [ `lipc-get-prop com.lab126.powerd status | grep "Charging: Yes" | wc -l` -gt 0 ]
-			then
-				# wait for the next trigger time
-				wait_for $(( 60 * $(get_time_to_next_update) ))
-				exitloop=1
-			fi
-
-			sleep 1
-		done
-	fi
-
-	if [ `lipc-get-prop com.lab126.powerd status | grep "Ready" | wc -l` -gt 0 ]
-	then
-		while [ $exitloop -eq 0 ]
-		do
-			logger "Running update on Ready status"
-			sh ./update.sh
-
-			if [ `lipc-get-prop com.lab126.powerd status | grep -E "Active|Screen Saver" | wc -l` -gt 0 ]
-			then
-				exitloop=1
-			fi
-
-			if [ $exitloop -eq 0 ]
-			then
-				# wait for the next trigger time
-				wait_for $(( 60 * $(get_time_to_next_update) ))
-			fi
-		done
-	fi
-
-	if [ $exitloop -eq 0 ] # device not in screensaver 
-	then
-		logger "Device nor in ready nor in Screensaver status"
-		sleep 10
-	fi
 done

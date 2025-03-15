@@ -2,17 +2,18 @@
 
 # change to directory of this script
 cd "$(dirname "$0")"
+INSTALLDIR=/mnt/us/extensions/onlinescreensaver
 
 # load configuration
 if [ -e "config.sh" ]; then
-	source /mnt/us/extensions/onlinescreensaver/bin/config.sh
+	source $INSTALLDIR/bin/config.sh
 fi
 
 # load utils
 if [ -e "utils.sh" ]; then
-	source /mnt/us/extensions/onlinescreensaver/bin/utils.sh
+	source $INSTALLDIR/bin/utils.sh
 else
-	echo "Could not find utils.sh in `pwd`"
+	echo "Could not find utils.sh"
 	exit
 fi
 
@@ -20,14 +21,16 @@ logger "Checking online screensaver auto-update"
 if [ -e /etc/upstart ]; then
 	logger "Setting up Upstart service"
 
-	# TODO: revert
+	mntroot rw
+	cp $INSTALLDIR/initscripts/upstart.conf /etc/upstart/onlinescreensavers.conf
+	mntroot ro
 
 	start onlinescreensaver
 else [ -e /etc/init.d ]; then
 	logger "Setting up Init.d service"
 
 	mntroot rw
-	cp /mnt/us/extensions/onlinescreensaver/bin/sysv-init.sh /etc/init.d/onlinescreensaver
+	cp $INSTALLDIR/bin/initscripts/sysvinit.sh /etc/init.d/onlinescreensaver
 	ln -s /etc/init.d/onlinescreensaver  /etc/rc5.d/onlinescreensaver
 	mntroot ro
 
