@@ -1,12 +1,9 @@
-THIS REPO CONTAINS THE ORIGINAL WORK OF Peterson: https://www.mobileread.com/forums/showthread.php?t=236104
-
 Forked from https://github.com/Kuhno92/onlinescreensaverPW2
 
-
 Online Screensaver
------------------- v0.3
-                   by peterson, via mobileread.com
-                   thanks to the great folks in the Kindle developer corner
+------------------
+Originally by peterson, via [mobileread.com](https://www.mobileread.com/forums/showthread.php?t=236104)
+thanks to the great folks in the Kindle developer corner
 
 The Online Screensaver automatically fetches a new screensaver image from a
 user-specified URL at a user-specified interval. If a screensaver is shown
